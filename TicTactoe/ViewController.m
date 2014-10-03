@@ -64,7 +64,7 @@
         }
     }
     
-    //[self determineWinner];
+    [self determineWinner];
     
 }
 
@@ -81,6 +81,7 @@
         labelMark.text = @"";
         self.playerNumber++;
     }
+    [self determineWinner];
     NSLog(@"New Game Created");
 
 }
@@ -88,35 +89,30 @@
 - (void)determineWinner {
 
     NSMutableArray *labelsArray = [NSMutableArray arrayWithObjects:self.labelOne, self.labelTwo, self.labelThree, self.labelFour, self.labelFive, self.labelSix, self.labelSeven, self.labelEight, self.labelNine, nil];
-    NSMutableArray *pointsArray = [NSMutableArray arrayWithObjects:@"1",@"2",@"3",@"4",@"5",@"6",@"7",@"8",@"9", nil];
+    NSMutableArray *pointsArray = [NSMutableArray arrayWithObjects:@"0",@"0",@"0",@"0",@"0",@"0",@"0",@"0",@"0", nil];
+    NSArray *replacedField = [NSArray arrayWithObjects:@"1", @"1", @"1", @"1", @"1", @"1", @"1", @"1", @"1", nil];
+    NSArray *replacedFieldTwo = [NSArray arrayWithObjects:@"-1", @"-1", @"-1", @"-1", @"-1", @"-1", @"-1", @"-1", @"-1", nil];
+    NSArray *replacedFieldThree = [NSArray arrayWithObjects:@"0",@"0",@"0",@"0",@"0",@"0",@"0",@"0",@"0", nil];
     for (int i = 0; i < labelsArray.count; i++) {
         UILabel *labelMark = labelsArray[i];
+        NSMutableDictionary *myDictionary = [[NSMutableDictionary alloc] initWithObjectsAndKeys:labelsArray[i],pointsArray[i], nil];
+
         if ([labelMark.text isEqualToString:@"X"]){
-            
-            NSMutableDictionary *points = [[NSMutableDictionary alloc] initWithObjects:labelsArray forKeys:pointsArray];
-            NSArray *pointsOnPoints = [points allKeys];
-            NSLog(@"%@",pointsOnPoints);
-            
-            //1+2+3
-            //4+5+6
-            //7+8+9
-            
+                [myDictionary setObject:[myDictionary objectForKey:[pointsArray objectAtIndex:i]] forKey:[replacedField objectAtIndex:i]];
+                [myDictionary removeObjectForKey:[pointsArray objectAtIndex:i]];
+            } else if ([labelMark.text isEqualToString:@"O"]){
+                [myDictionary setObject:[myDictionary objectForKey:[pointsArray objectAtIndex:i]] forKey:[replacedFieldTwo objectAtIndex:i]];
+                [myDictionary removeObjectForKey:[pointsArray objectAtIndex:i]];
+            } else {
+                [myDictionary setObject:[myDictionary objectForKey:[pointsArray objectAtIndex:i]] forKey:[replacedFieldThree objectAtIndex:i]];
+                [myDictionary removeObjectForKey:[pointsArray objectAtIndex:i]];
+            }
         
-            
-        
-    } else if ([labelMark.text isEqualToString:@"O"]){
-        
+        NSArray *pointsOnPoints = [myDictionary allKeys];
+        NSLog(@"%@",pointsOnPoints);
     }
 
-        
-    
-
-    }
-    
-    
-    
 }
-
 
 - (void) findLabelUsingPoint:(CGPoint) point {
     
