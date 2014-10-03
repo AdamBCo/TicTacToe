@@ -234,6 +234,18 @@
                                     </mask>
                                 </variation>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Aky-X3-Kyl">
+                                <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                                <state key="normal" title="New Game">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <variation key="widthClass=compact" fixedFrame="YES">
+                                    <rect key="frame" x="301" y="538" width="76" height="30"/>
+                                </variation>
+                                <connections>
+                                    <action selector="newGame:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="xna-4m-gqE"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <gestureRecognizers/>
@@ -269,6 +281,7 @@
                                 <exclude reference="Bb6-LY-dip"/>
                                 <exclude reference="sgz-Ys-OAm"/>
                                 <exclude reference="orh-5A-Xfy"/>
+                                <exclude reference="Aky-X3-Kyl"/>
                             </mask>
                             <mask key="constraints">
                                 <exclude reference="FUl-Yo-VBQ"/>
@@ -303,6 +316,7 @@
                                 <include reference="Bb6-LY-dip"/>
                                 <include reference="sgz-Ys-OAm"/>
                                 <include reference="orh-5A-Xfy"/>
+                                <include reference="Aky-X3-Kyl"/>
                             </mask>
                             <mask key="constraints">
                                 <include reference="FUl-Yo-VBQ"/>

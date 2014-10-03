@@ -20,6 +20,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *labelNine;
 @property (strong, nonatomic) IBOutlet UILabel *whichPlayerLabel;
 @property CGPoint originalCenter;
+@property NSInteger playerNumber;
 @end
 
 @implementation ViewController
@@ -42,16 +43,43 @@
         UILabel *label = labelsArray[i];
         NSString *labelFrameString = NSStringFromCGRect(label.frame);
         CGRect labelFrameRect = CGRectFromString(labelFrameString);
-        NSLog(@"%@",labelFrameString);
+        //NSLog(@"%@",labelFrameString);
         
         if (CGRectContainsPoint(labelFrameRect, point)) {
             UILabel *labelMark = labelsArray[i];
+
+        
+        if (self.playerNumber % 2 == 0) {
             labelMark.backgroundColor = [UIColor redColor];
             labelMark.text = @"X";
+            self.playerNumber++;
+            NSLog(@"Player One");
+        } else {
+            labelMark.backgroundColor = [UIColor blueColor];
+            labelMark.text = @"O";
+            NSLog(@"Player Two");
+            self.playerNumber++;
+        }
         }
     }
     
 }
+
+- (IBAction)newGame:(id)sender {
+    self.playerNumber = 0;
+    
+    NSArray *labelsArray = [NSArray arrayWithObjects:self.labelOne, self.labelTwo, self.labelThree, self.labelFour, self.labelFive, self.labelSix, self.labelSeven, self.labelEight, self.labelNine, nil];
+    
+    for (int i = 0; i < labelsArray.count; i++) {
+        UILabel *labelMark = labelsArray[i];
+        labelMark.backgroundColor = [UIColor greenColor];
+        labelMark.text = @"";
+        self.playerNumber++;
+    }
+    NSLog(@"New Game Created");
+
+}
+
 
 - (void) findLabelUsingPoint:(CGPoint) point {
     
