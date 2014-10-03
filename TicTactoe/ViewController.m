@@ -21,13 +21,21 @@
 @property (strong, nonatomic) IBOutlet UILabel *whichPlayerLabel;
 @property CGPoint originalCenter;
 @property NSInteger playerNumber;
+@property NSMutableArray *myArray;
+@property NSInteger numberOfX;
+@property NSMutableArray *totalPointsArray;
+
 @end
 
 @implementation ViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
+    self.numberOfX = 0;
+    self.labelOne.text = @"";
+    self.myArray = [NSMutableArray arrayWithObjects:self.labelOne, self.labelTwo, self.labelThree, self.labelFour, self.labelFive, self.labelSix, self.labelSeven, self.labelEight, self.labelNine, nil];
+    self.totalPointsArray = [[NSMutableArray alloc] initWithCapacity:9];
+    
 }
 
 - (IBAction)onLabelTapped:(UITapGestureRecognizer *)tapGesture {
@@ -36,6 +44,10 @@
     NSLog(@"Y Location: %f",point.y);
     [tapGesture setNumberOfTapsRequired:1];
     [self.view addGestureRecognizer:tapGesture];
+    
+    ///////////
+    //NSLog(@"%@\n",self.totalPointsArray);
+
     
     NSMutableArray *labelsArray = [NSMutableArray arrayWithObjects:self.labelOne, self.labelTwo, self.labelThree, self.labelFour, self.labelFive, self.labelSix, self.labelSeven, self.labelEight, self.labelNine, nil];
     
@@ -82,37 +94,39 @@
         self.playerNumber++;
     }
     [self determineWinner];
+    
+    for (int i = 0; i < self.myArray.count; i++){
+        [self.totalPointsArray insertObject:@"" atIndex:i];
+    }
+    NSLog(@"%@",self.totalPointsArray);
     NSLog(@"New Game Created");
 
 }
 
 - (void)determineWinner {
-
-    NSMutableArray *labelsArray = [NSMutableArray arrayWithObjects:self.labelOne, self.labelTwo, self.labelThree, self.labelFour, self.labelFive, self.labelSix, self.labelSeven, self.labelEight, self.labelNine, nil];
-    NSMutableArray *pointsArray = [NSMutableArray arrayWithObjects:@"0",@"0",@"0",@"0",@"0",@"0",@"0",@"0",@"0", nil];
-    NSArray *replacedField = [NSArray arrayWithObjects:@"1", @"1", @"1", @"1", @"1", @"1", @"1", @"1", @"1", nil];
-    NSArray *replacedFieldTwo = [NSArray arrayWithObjects:@"-1", @"-1", @"-1", @"-1", @"-1", @"-1", @"-1", @"-1", @"-1", nil];
-    NSArray *replacedFieldThree = [NSArray arrayWithObjects:@"0",@"0",@"0",@"0",@"0",@"0",@"0",@"0",@"0", nil];
-    for (int i = 0; i < labelsArray.count; i++) {
-        UILabel *labelMark = labelsArray[i];
-        NSMutableDictionary *myDictionary = [[NSMutableDictionary alloc] initWithObjectsAndKeys:labelsArray[i],pointsArray[i], nil];
-
-        if ([labelMark.text isEqualToString:@"X"]){
-                [myDictionary setObject:[myDictionary objectForKey:[pointsArray objectAtIndex:i]] forKey:[replacedField objectAtIndex:i]];
-                [myDictionary removeObjectForKey:[pointsArray objectAtIndex:i]];
+    
+    NSString *point;
+    //for (UILabel *label in self.myArray)
+    NSMutableArray *pointsArray = [[NSMutableArray alloc] initWithCapacity:9];
+    for (int i = 0; i < self.myArray.count; i++){
+        UILabel *labelMark = self.myArray[i];
+        if ([labelMark.text isEqualToString: @"X"]){
+                point = @"1";
+                [pointsArray insertObject:point atIndex:i];
+                self.numberOfX--;
             } else if ([labelMark.text isEqualToString:@"O"]){
-                [myDictionary setObject:[myDictionary objectForKey:[pointsArray objectAtIndex:i]] forKey:[replacedFieldTwo objectAtIndex:i]];
-                [myDictionary removeObjectForKey:[pointsArray objectAtIndex:i]];
+                point = @"-1";
+                [pointsArray insertObject:point atIndex:i];
             } else {
-                [myDictionary setObject:[myDictionary objectForKey:[pointsArray objectAtIndex:i]] forKey:[replacedFieldThree objectAtIndex:i]];
-                [myDictionary removeObjectForKey:[pointsArray objectAtIndex:i]];
+                point = @"0";
+                [pointsArray insertObject:point atIndex:i];
             }
-        
-        NSArray *pointsOnPoints = [myDictionary allKeys];
-        NSLog(@"%@",pointsOnPoints);
     }
-
+    self.totalPointsArray = pointsArray;
+    NSLog(@"%@\n",self.totalPointsArray);
 }
+
+
 
 - (void) findLabelUsingPoint:(CGPoint) point {
     
