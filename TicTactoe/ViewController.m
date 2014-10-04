@@ -26,7 +26,12 @@
 @property NSString *winner;
 @property UIAlertView *alertOne;
 @property UIAlertView *alertTwo;
+@property UIAlertView *timerAlertView;
 @property (strong, nonatomic) IBOutlet UILabel *draggableLabel;
+@property NSInteger *timerValue;
+
+
+@property NSTimer *gameTimer;
 @end
 
 
@@ -34,12 +39,15 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+
+    
     
     self.myArray = [NSMutableArray arrayWithObjects:self.labelOne, self.labelTwo, self.labelThree, self.labelFour, self.labelFive, self.labelSix, self.labelSeven, self.labelEight, self.labelNine, nil];
     self.alertOne = [[UIAlertView alloc] initWithTitle:@"You Won!!" message:@"X is the Winner!!" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
     [self.alertOne addButtonWithTitle:@"New Game"];
     self.alertTwo = [[UIAlertView alloc] initWithTitle:@"You Won!!" message:@"O is the Winner!!" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
     [self.alertTwo addButtonWithTitle:@"New Game"];
+    self.timerAlertView = [[UIAlertView alloc] initWithTitle:@"You took too long!" message:@"You will lose a turn. :(" delegate:self cancelButtonTitle:@"Okay" otherButtonTitles:nil];
     self.totalPointsArray = [[NSMutableArray alloc] initWithCapacity:9];
     
     for (int i = 0; i < self.myArray.count; i++) {
@@ -48,6 +56,8 @@
     }
     
     self.playerNumber = 1;
+    [self startTimer];
+    
     
 
 }
@@ -77,10 +87,13 @@
                 if (self.playerNumber % 2 == 0) {
                     labelMark.backgroundColor = [UIColor redColor];
                     labelMark.text = @"O";
+                    [self.gameTimer invalidate];
+                    [self startTimer];
                 } else {
                     labelMark.backgroundColor = [UIColor blueColor];
                     labelMark.text = @"X";
-                    NSLog(@"Player Two");
+                    [self.gameTimer invalidate];
+                    [self startTimer];
                 }
                 self.playerNumber++;
             }
@@ -112,7 +125,8 @@
     NSLog(@"New Game Created");
     
     self.playerNumber = 0;
-    
+    [self.gameTimer invalidate];
+    [self startTimer];
 
 }
 
@@ -244,10 +258,14 @@
                     labelMarkTwo.backgroundColor = [UIColor redColor];
                     labelMarkTwo.text = @"O";
                     self.playerNumber++;
+                    [self.gameTimer invalidate];
+                    [self startTimer];
                 } else {
                     labelMarkTwo.backgroundColor = [UIColor blueColor];
                     labelMarkTwo.text = @"X";
                     self.playerNumber++;
+                    [self.gameTimer invalidate];
+                    [self startTimer];
                 }
             }
         }
@@ -269,7 +287,20 @@
     
 }
 
+- (void)startTimer {
+    float count_down = 10.0;
+    self.gameTimer = [NSTimer scheduledTimerWithTimeInterval: count_down target: self
+                                                    selector: @selector(changePlayerTurn:) userInfo: nil repeats: YES];
+}
 
+
+-(void) changePlayerTurn:(NSTimer*) t {
+    self.playerNumber++;
+    [self whoWon];
+    [self findWinner];
+    [self determineDragableLabelValue];
+    NSLog(@"green");
+}
 
 
 
