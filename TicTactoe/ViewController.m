@@ -29,9 +29,11 @@
 @property UIAlertView *timerAlertView;
 @property (strong, nonatomic) IBOutlet UILabel *draggableLabel;
 @property NSInteger *timerValue;
+@property (weak, nonatomic) IBOutlet UINavigationItem *customerNavigationBarTitle;
 
 
 @property NSTimer *gameTimer;
+@property NSTimer *titleTimer;
 @end
 
 
@@ -57,6 +59,7 @@
     
     self.playerNumber = 1;
     [self startTimer];
+    [self titleTimers];
     
     
 
@@ -89,6 +92,7 @@
                     labelMark.text = @"O";
                     [self.gameTimer invalidate];
                     [self startTimer];
+                    [self titleTimers];
                 } else {
                     labelMark.backgroundColor = [UIColor blueColor];
                     labelMark.text = @"X";
@@ -127,6 +131,7 @@
     self.playerNumber = 0;
     [self.gameTimer invalidate];
     [self startTimer];
+    [self titleTimers];
 
 }
 
@@ -260,12 +265,14 @@
                     self.playerNumber++;
                     [self.gameTimer invalidate];
                     [self startTimer];
+                    [self titleTimers];
                 } else {
                     labelMarkTwo.backgroundColor = [UIColor blueColor];
                     labelMarkTwo.text = @"X";
                     self.playerNumber++;
                     [self.gameTimer invalidate];
                     [self startTimer];
+                    [self titleTimers];
                 }
             }
         }
@@ -288,11 +295,10 @@
 }
 
 - (void)startTimer {
-    float count_down = 10.0;
+    float count_down = 11.0;
     self.gameTimer = [NSTimer scheduledTimerWithTimeInterval: count_down target: self
                                                     selector: @selector(changePlayerTurn:) userInfo: nil repeats: YES];
 }
-
 
 -(void) changePlayerTurn:(NSTimer*) t {
     self.playerNumber++;
@@ -300,6 +306,24 @@
     [self findWinner];
     [self determineDragableLabelValue];
     NSLog(@"green");
+    [self startTimer];
+}
+
+-(void)titleTimers{
+    self.customerNavigationBarTitle.title = @"10";
+    float count_down = 1.0;
+    self.titleTimer = [NSTimer scheduledTimerWithTimeInterval: count_down target: self
+                                                     selector: @selector(modifyTitle) userInfo: nil repeats: YES];
+}
+
+-(void)modifyTitle{
+    if (self.customerNavigationBarTitle.title.integerValue > 0) {
+        NSInteger time = self.customerNavigationBarTitle.title.integerValue;
+        time--;
+        self.customerNavigationBarTitle.title = [NSString stringWithFormat:@"%ld",(long)time];
+    } else {
+        self.customerNavigationBarTitle.title = @"10";
+    }
 }
 
 

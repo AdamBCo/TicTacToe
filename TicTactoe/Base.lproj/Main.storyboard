@@ -363,6 +363,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="mk0-wa-7zL"/>
                     <connections>
+                        <outlet property="customerNavigationBarTitle" destination="mk0-wa-7zL" id="qos-xp-HPt"/>
                         <outlet property="draggableLabel" destination="d02-Or-umK" id="Zze-Lc-H1p"/>
                         <outlet property="labelEight" destination="MIj-hH-8Te" id="URG-Tg-MLt"/>
                         <outlet property="labelFive" destination="xun-kv-cq3" id="2tb-wh-I98"/>
