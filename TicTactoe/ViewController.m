@@ -19,8 +19,10 @@
 @property (strong, nonatomic) IBOutlet UILabel *labelEight;
 @property (strong, nonatomic) IBOutlet UILabel *labelNine;
 @property (strong, nonatomic) IBOutlet UILabel *whichPlayerLabel;
+
 @property CGPoint originalCenter;
 @property NSInteger playerNumber;
+
 @property NSMutableArray *myArray;
 @property NSMutableArray *totalPointsArray;
 @property NSString *winner;
@@ -40,6 +42,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self setGameDefaults];
+    [self determineDragableLabelValue];
+    
     self.title = @"Tic Tac Toe";
     
     //Create array of squares
@@ -62,14 +67,12 @@
     
     
     self.gameTimerLabel.text = @"10";
-    self.playerNumber = 1;
     [self titleTimers];
-    
-    
 
 }
 
 -(void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
     self.originalCenter = self.draggableLabel.center;
 }
 
@@ -80,15 +83,11 @@
 }
 
 - (IBAction)onLabelTapped:(UITapGestureRecognizer *)tapGesture {
-    
     CGPoint point = [tapGesture locationInView:self.view];
-    
-    
+    [tapGesture setNumberOfTapsRequired:1];
     for (int i = 0; i < self.myArray.count; i++) {
         UILabel *label = self.myArray[i];
         CGRect labelFrameRect = CGRectFromString(NSStringFromCGRect(label.frame));
-
-        
         if (CGRectContainsPoint(labelFrameRect, point)) {
             UILabel *labelMark = self.myArray[i];
             if ([labelMark.text  isEqualToString: @""]) {
@@ -113,24 +112,26 @@
 
 
 - (IBAction)newGame:(id)sender {
-    self.playerNumber = 0;
-    
+    [self setGameDefaults];
+}
+
+
+
+-(void)setGameDefaults {
+    NSLog(@"New Game Created");
+    self.playerNumber = 1;
+    [self determineDragableLabelValue];
     //Turns all squares to green colors
     for (int i = 0; i < self.myArray.count; i++) {
         UILabel *labelMark = self.myArray[i];
         labelMark.backgroundColor = [UIColor greenColor];
         labelMark.text = @"";
     }
-    [self whoWon];
-    
     for (int i = 0; i < self.myArray.count; i++){
         [self.totalPointsArray insertObject:@"" atIndex:i];
     }
-    NSLog(@"New Game Created");
-    
-    self.playerNumber = 0;
     self.gameTimerLabel.text = @"10";
-
+    
 }
 
 - (void)whoWon{
@@ -182,65 +183,10 @@
     NSInteger diaganolOne = squareOne.integerValue + squareFive.integerValue + squareNine.integerValue;
     NSInteger diagonalTwo = squareThree.integerValue + squareFive.integerValue + squareSeven.integerValue;
     
-    if (rowOne == -3 ) {
+    if (rowOne == -3 || rowTwo == -3 || rowThree == -3 || columnOne == -3 || columnTwo == -3 || columnThree == -3 || diaganolOne == -3 || diagonalTwo == -3 ) {
         self.winner = @"O";
         [self.alertTwo show];
-        }else if (rowOne == 3){
-            self.winner = @"X";
-            [self.alertOne show];
-    }
-    if (rowTwo == -3) {
-        self.winner = @"O";
-        [self.alertTwo show];
-    }else if (rowTwo == 3){
-            self.winner = @"X";
-            [self.alertOne show];
-    }
-    if (rowThree == -3) {
-        self.winner = @"O";
-        [self.alertTwo show];
-    }else if (rowThree == 3){
-        self.winner = @"X";
-        [self.alertOne show];
-    }
-    if (columnOne == -3) {
-        self.winner = @"O";
-        [self.alertTwo show];
-    }else if (columnOne== 3) {
-        self.winner = @"X";
-        [self.alertOne show];
-    }
-    if (columnTwo == -3) {
-        self.winner = @"O";
-        [self.alertTwo show];
-    }
-    else if (columnTwo == 3){
-        self.winner = @"X";
-        [self.alertOne show];
-    }
-    
-    if (columnThree == -3) {
-        self.winner = @"O";
-        [self.alertTwo show];
-    }
-    else if (columnThree == 3){
-        self.winner = @"X";
-        [self.alertOne show];
-    }
-    if (diaganolOne == -3) {
-        self.winner = @"O";
-        [self.alertTwo show];
-    }
-    else if (diaganolOne ==3){
-        self.winner = @"X";
-        [self.alertOne show];
-        
-    }
-    if (diagonalTwo == -3) {
-        self.winner = @"O";
-        [self.alertTwo show];
-    }
-    else if (diagonalTwo == 3){
+    }else if (rowOne == 3 || rowTwo == 3 || rowThree == 3 || columnOne == 3 || columnTwo == 3 || columnThree == 3 || diaganolOne == 3 || diagonalTwo == 3 ){
         self.winner = @"X";
         [self.alertOne show];
     }
@@ -284,7 +230,6 @@
 }
 
 
-
 -(void) determineDragableLabelValue {
     if (self.playerNumber % 2 == 0) {
         self.draggableLabel.text = @"O";
@@ -307,9 +252,7 @@
     } else {
         self.gameTimerLabel.text = @"10";
         self.playerNumber++;
-        [self determineDragableLabelValue];
     }
-    NSLog(@"The player number value is: %ld", (long)self.playerNumber);
 }
 
 @end
