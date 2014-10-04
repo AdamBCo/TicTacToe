@@ -57,6 +57,7 @@
         labelMark.text = @"";
     }
     
+    self.customerNavigationBarTitle.title = @"10";
     self.playerNumber = 1;
     [self startTimer];
     [self titleTimers];
@@ -90,16 +91,22 @@
                 if (self.playerNumber % 2 == 0) {
                     labelMark.backgroundColor = [UIColor redColor];
                     labelMark.text = @"O";
+                    self.playerNumber++;
                     [self.gameTimer invalidate];
                     [self startTimer];
+                    [self.titleTimer invalidate];
                     [self titleTimers];
+                    
                 } else {
                     labelMark.backgroundColor = [UIColor blueColor];
                     labelMark.text = @"X";
+                    self.playerNumber++;
                     [self.gameTimer invalidate];
                     [self startTimer];
+                    [self.titleTimer invalidate];
+                    [self titleTimers];
+                    
                 }
-                self.playerNumber++;
             }
         }
     }
@@ -131,7 +138,6 @@
     self.playerNumber = 0;
     [self.gameTimer invalidate];
     [self startTimer];
-    [self titleTimers];
 
 }
 
@@ -265,6 +271,7 @@
                     self.playerNumber++;
                     [self.gameTimer invalidate];
                     [self startTimer];
+                    [self.titleTimer invalidate];
                     [self titleTimers];
                 } else {
                     labelMarkTwo.backgroundColor = [UIColor blueColor];
@@ -272,6 +279,7 @@
                     self.playerNumber++;
                     [self.gameTimer invalidate];
                     [self startTimer];
+                    [self.titleTimer invalidate];
                     [self titleTimers];
                 }
             }
@@ -295,7 +303,8 @@
 }
 
 - (void)startTimer {
-    float count_down = 11.0;
+    
+    float count_down = 10.0;
     self.gameTimer = [NSTimer scheduledTimerWithTimeInterval: count_down target: self
                                                     selector: @selector(changePlayerTurn:) userInfo: nil repeats: YES];
 }
@@ -305,19 +314,20 @@
     [self whoWon];
     [self findWinner];
     [self determineDragableLabelValue];
-    NSLog(@"green");
+    [self.gameTimer invalidate];
     [self startTimer];
+    NSLog(@"10 Seconds has passed");
+    NSLog(@"The player number value is: %ld", (long)self.playerNumber);
 }
 
 -(void)titleTimers{
-    self.customerNavigationBarTitle.title = @"10";
     float count_down = 1.0;
     self.titleTimer = [NSTimer scheduledTimerWithTimeInterval: count_down target: self
                                                      selector: @selector(modifyTitle) userInfo: nil repeats: YES];
 }
 
 -(void)modifyTitle{
-    if (self.customerNavigationBarTitle.title.integerValue > 0) {
+    if (self.customerNavigationBarTitle.title.integerValue > 1) {
         NSInteger time = self.customerNavigationBarTitle.title.integerValue;
         time--;
         self.customerNavigationBarTitle.title = [NSString stringWithFormat:@"%ld",(long)time];
