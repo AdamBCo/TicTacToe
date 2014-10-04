@@ -240,12 +240,21 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <variation key="widthClass=compact" fixedFrame="YES">
-                                    <rect key="frame" x="301" y="538" width="76" height="30"/>
+                                    <rect key="frame" x="162" y="504" width="76" height="30"/>
                                 </variation>
                                 <connections>
                                     <action selector="newGame:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="xna-4m-gqE"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="O" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d02-Or-umK">
+                                <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="100"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                                <variation key="widthClass=compact" fixedFrame="YES">
+                                    <rect key="frame" x="284" y="470" width="110" height="110"/>
+                                </variation>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <gestureRecognizers/>
@@ -253,10 +262,14 @@
                             <constraint firstItem="URa-K7-rPT" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="-10" id="3ey-vR-Jou"/>
                             <constraint firstItem="Bb6-LY-dip" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="-10" id="Akz-9Q-43N"/>
                             <constraint firstItem="xun-kv-cq3" firstAttribute="top" secondItem="sgz-Ys-OAm" secondAttribute="bottom" constant="28" id="Auy-yd-AMt"/>
-                            <constraint firstAttribute="centerY" secondItem="3EI-we-lv2" secondAttribute="centerY" id="FUl-Yo-VBQ"/>
+                            <constraint firstAttribute="centerY" secondItem="3EI-we-lv2" secondAttribute="centerY" id="FUl-Yo-VBQ">
+                                <variation key="widthClass=compact" constant="35"/>
+                            </constraint>
                             <constraint firstAttribute="trailingMargin" secondItem="orh-5A-Xfy" secondAttribute="trailing" constant="-10" id="MXg-dX-WhJ"/>
                             <constraint firstItem="3EI-we-lv2" firstAttribute="top" secondItem="orh-5A-Xfy" secondAttribute="bottom" constant="28" id="XVi-oL-60H"/>
-                            <constraint firstAttribute="centerY" secondItem="xun-kv-cq3" secondAttribute="centerY" id="YCK-Ay-Wlx"/>
+                            <constraint firstAttribute="centerY" secondItem="xun-kv-cq3" secondAttribute="centerY" id="YCK-Ay-Wlx">
+                                <variation key="widthClass=compact" constant="35"/>
+                            </constraint>
                             <constraint firstItem="URa-K7-rPT" firstAttribute="top" secondItem="Bb6-LY-dip" secondAttribute="bottom" constant="28" id="YbK-Cl-Qnz"/>
                             <constraint firstAttribute="trailingMargin" secondItem="3EI-we-lv2" secondAttribute="trailing" constant="-10" id="a6N-Bs-O4y"/>
                             <constraint firstAttribute="centerX" secondItem="MIj-hH-8Te" secondAttribute="centerX" id="bJE-kW-A2e"/>
@@ -267,7 +280,9 @@
                             <constraint firstAttribute="centerX" secondItem="sgz-Ys-OAm" secondAttribute="centerX" id="oTi-Fa-ul1"/>
                             <constraint firstItem="kbR-wK-yS4" firstAttribute="top" secondItem="URa-K7-rPT" secondAttribute="bottom" constant="28" id="oet-Ul-AsA"/>
                             <constraint firstItem="kbR-wK-yS4" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="-10" id="vr4-9q-p0U"/>
-                            <constraint firstAttribute="centerY" secondItem="URa-K7-rPT" secondAttribute="centerY" id="xNe-ey-NNP"/>
+                            <constraint firstAttribute="centerY" secondItem="URa-K7-rPT" secondAttribute="centerY" id="xNe-ey-NNP">
+                                <variation key="widthClass=compact" constant="35"/>
+                            </constraint>
                         </constraints>
                         <variation key="default">
                             <mask key="subviews">
@@ -282,6 +297,7 @@
                                 <exclude reference="sgz-Ys-OAm"/>
                                 <exclude reference="orh-5A-Xfy"/>
                                 <exclude reference="Aky-X3-Kyl"/>
+                                <exclude reference="d02-Or-umK"/>
                             </mask>
                             <mask key="constraints">
                                 <exclude reference="FUl-Yo-VBQ"/>
@@ -317,6 +333,7 @@
                                 <include reference="sgz-Ys-OAm"/>
                                 <include reference="orh-5A-Xfy"/>
                                 <include reference="Aky-X3-Kyl"/>
+                                <include reference="d02-Or-umK"/>
                             </mask>
                             <mask key="constraints">
                                 <include reference="FUl-Yo-VBQ"/>
@@ -341,10 +358,12 @@
                         </variation>
                         <connections>
                             <outletCollection property="gestureRecognizers" destination="AVX-8j-IJh" appends="YES" id="qgd-qA-e3i"/>
+                            <outletCollection property="gestureRecognizers" destination="mkF-1G-QCZ" appends="YES" id="VnI-8a-07z"/>
                         </connections>
                     </view>
                     <navigationItem key="navigationItem" id="mk0-wa-7zL"/>
                     <connections>
+                        <outlet property="draggableLabel" destination="d02-Or-umK" id="Zze-Lc-H1p"/>
                         <outlet property="labelEight" destination="MIj-hH-8Te" id="URG-Tg-MLt"/>
                         <outlet property="labelFive" destination="xun-kv-cq3" id="2tb-wh-I98"/>
                         <outlet property="labelFour" destination="URa-K7-rPT" id="3hF-7F-2UX"/>
@@ -364,6 +383,12 @@
                         <outlet property="delegate" destination="vXZ-lx-hvc" id="eD3-9q-37k"/>
                     </connections>
                 </tapGestureRecognizer>
+                <panGestureRecognizer minimumNumberOfTouches="1" id="mkF-1G-QCZ">
+                    <connections>
+                        <action selector="draggableLabel:" destination="vXZ-lx-hvc" id="PaA-4N-xJJ"/>
+                        <outlet property="delegate" destination="vXZ-lx-hvc" id="nDQ-GW-AdY"/>
+                    </connections>
+                </panGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1257" y="407"/>
         </scene>
