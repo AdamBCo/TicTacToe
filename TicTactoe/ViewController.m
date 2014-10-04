@@ -47,23 +47,13 @@
         labelMark.text = @"";
     }
     
+    self.playerNumber = 1;
     
-    if (self.playerNumber % 2 == 0) {
-        self.draggableLabel.text = @"O";
-    } else {
-        self.draggableLabel.text = @"X";
-    }
-    
-    
+
 }
 
 -(void)viewDidAppear:(BOOL)animated {
     self.originalCenter = self.draggableLabel.center;
-    if (self.playerNumber % 2 == 0) {
-        self.draggableLabel.text = @"O";
-    } else {
-        self.draggableLabel.text = @"X";
-    }
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
@@ -74,44 +64,32 @@
 
 - (IBAction)onLabelTapped:(UITapGestureRecognizer *)tapGesture {
     CGPoint point = [tapGesture locationInView:self.view];
-    NSLog(@"X location: %f", point.x);
-    NSLog(@"Y Location: %f",point.y);
-    [tapGesture setNumberOfTapsRequired:1];
-    [self.view addGestureRecognizer:tapGesture];
-    
-    if (self.playerNumber % 2 == 0) {
-        self.draggableLabel.text = @"O";
-    } else {
-        self.draggableLabel.text = @"X";
-    }
     
     
     for (int i = 0; i < self.myArray.count; i++) {
         UILabel *label = self.myArray[i];
-        NSString *labelFrameString = NSStringFromCGRect(label.frame);
-        CGRect labelFrameRect = CGRectFromString(labelFrameString);
-        //NSLog(@"%@",labelFrameString);
+        CGRect labelFrameRect = CGRectFromString(NSStringFromCGRect(label.frame));
+
         
         if (CGRectContainsPoint(labelFrameRect, point)) {
             UILabel *labelMark = self.myArray[i];
-        
-        if (self.playerNumber % 2 == 0) {
-            labelMark.backgroundColor = [UIColor redColor];
-            labelMark.text = @"O";
-            self.playerNumber++;
-            NSLog(@"Player One");
-        } else {
-            labelMark.backgroundColor = [UIColor blueColor];
-            labelMark.text = @"X";
-            NSLog(@"Player Two");
-            self.playerNumber++;
-        }
-            
+            if ([labelMark.text  isEqualToString: @""]) {
+                if (self.playerNumber % 2 == 0) {
+                    labelMark.backgroundColor = [UIColor redColor];
+                    labelMark.text = @"O";
+                } else {
+                    labelMark.backgroundColor = [UIColor blueColor];
+                    labelMark.text = @"X";
+                    NSLog(@"Player Two");
+                }
+                self.playerNumber++;
+            }
         }
     }
     
     [self whoWon];
     [self findWinner];
+    [self determineDragableLabelValue];
     
 }
 
@@ -125,15 +103,16 @@
         UILabel *labelMark = self.myArray[i];
         labelMark.backgroundColor = [UIColor greenColor];
         labelMark.text = @"";
-        self.playerNumber++;
     }
     [self whoWon];
     
     for (int i = 0; i < self.myArray.count; i++){
         [self.totalPointsArray insertObject:@"" atIndex:i];
     }
-    NSLog(@"%@",self.totalPointsArray);
     NSLog(@"New Game Created");
+    
+    self.playerNumber = 0;
+    
 
 }
 
@@ -179,10 +158,9 @@
     NSInteger diaganolOne = squareOne.integerValue + squareFive.integerValue + squareNine.integerValue;
     NSInteger diagonalTwo = squareThree.integerValue + squareFive.integerValue + squareSeven.integerValue;
     
-    if (rowOne == -3) {
+    if (rowOne == -3 ) {
         self.winner = @"O";
         [self.alertTwo show];
-            NSLog(@"Hello");
         }else if (rowOne == 3){
             self.winner = @"X";
             [self.alertOne show];
@@ -191,7 +169,6 @@
     if (rowTwo == -3) {
         self.winner = @"O";
         [self.alertTwo show];
-        NSLog(@"Hello");
     }else if (rowTwo == 3){
         self.winner = @"X";
         [self.alertOne show];
@@ -200,7 +177,6 @@
     if (rowThree == -3) {
         self.winner = @"O";
         [self.alertTwo show];
-        NSLog(@"Hello");
     }else if (rowThree == 3){
         self.winner = @"X";
         [self.alertOne show];
@@ -209,7 +185,6 @@
     if (columnOne == -3) {
         self.winner = @"O";
         [self.alertTwo show];
-        NSLog(@"Hello");
     }else if (columnOne== 3) {
         self.winner = @"X";
         [self.alertOne show];
@@ -217,7 +192,6 @@
     if (columnTwo == -3) {
         self.winner = @"O";
         [self.alertTwo show];
-        NSLog(@"Hello");
     }
     else if (columnTwo == 3){
         self.winner = @"X";
@@ -227,7 +201,6 @@
     if (columnThree == -3) {
         self.winner = @"O";
         [self.alertTwo show];
-        NSLog(@"Hello");
     }
     else if (columnThree == 3){
         self.winner = @"X";
@@ -236,7 +209,6 @@
     if (diaganolOne == -3) {
         self.winner = @"O";
         [self.alertTwo show];
-        NSLog(@"Hello");
     }
     else if (diaganolOne ==3){
         self.winner = @"X";
@@ -246,7 +218,6 @@
     if (diagonalTwo == -3) {
         self.winner = @"O";
         [self.alertTwo show];
-        NSLog(@"Hello");
     }
     else if (diagonalTwo == 3){
         self.winner = @"X";
@@ -255,53 +226,41 @@
     
     NSLog(@"Row One: %ld", (long)rowOne);
     
-    
 }
 
 
-
 - (IBAction)draggableLabel:(UIPanGestureRecognizer *)panGesture {
-    
     CGPoint point = [panGesture locationInView:self.view];
-    NSLog(@"X location: %f", point.x);
-    NSLog(@"Y Location: %f",point.y);
     self.draggableLabel.center = point;
-    
-    
-    if (self.playerNumber % 2 == 0) {
+
+    for (int i = 0; i < self.myArray.count; i++) {
         
-        for (int i = 0; i < self.myArray.count; i++) {
-                UILabel *label = self.myArray[i];
-                NSString *labelFrameString = NSStringFromCGRect(label.frame);
-                CGRect labelFrameRect = CGRectFromString(labelFrameString);
-                //NSLog(@"%@",labelFrameString);
-                
-                if (CGRectContainsPoint(labelFrameRect, point) && panGesture.state == UIGestureRecognizerStateEnded) {
-                    UILabel *labelMark = self.myArray[i];
-                    labelMark.backgroundColor = [UIColor redColor];
-                    labelMark.text = @"O";
-                    self.playerNumber++;
-                };
-        }
-    }else {
-        for (int i = 0; i < self.myArray.count; i++) {
-            UILabel *label = self.myArray[i];
-            NSString *labelFrameString = NSStringFromCGRect(label.frame);
-            CGRect labelFrameRect = CGRectFromString(labelFrameString);
-            //NSLog(@"%@",labelFrameString);
-            
+        UILabel *labelMarkTwo = self.myArray[i];
+        CGRect labelFrameRect = CGRectFromString(NSStringFromCGRect(labelMarkTwo.frame));
+        
+        if ([labelMarkTwo.text  isEqualToString: @""]) {
             if (CGRectContainsPoint(labelFrameRect, point) && panGesture.state == UIGestureRecognizerStateEnded) {
-                UILabel *labelMark = self.myArray[i];
-                labelMark.backgroundColor = [UIColor blueColor];
-                labelMark.text = @"X";
-                self.playerNumber++;
-            };
+                if (self.playerNumber % 2 == 0) {
+                    labelMarkTwo.backgroundColor = [UIColor redColor];
+                    labelMarkTwo.text = @"O";
+                    self.playerNumber++;
+                } else {
+                    labelMarkTwo.backgroundColor = [UIColor blueColor];
+                    labelMarkTwo.text = @"X";
+                    self.playerNumber++;
+                }
+            }
         }
     }
-    
+
     [self whoWon];
     [self findWinner];
+    [self determineDragableLabelValue];
     
+}
+
+-(void) determineDragableLabelValue {
+    NSLog(@"Player Number = %ld",(long)self.playerNumber);
     if (self.playerNumber % 2 == 0) {
         self.draggableLabel.text = @"O";
     } else {
@@ -309,7 +268,6 @@
     }
     
 }
-
 
 
 
