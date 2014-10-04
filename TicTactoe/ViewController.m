@@ -29,11 +29,10 @@
 @property UIAlertView *timerAlertView;
 @property (strong, nonatomic) IBOutlet UILabel *draggableLabel;
 @property NSInteger *timerValue;
-@property (weak, nonatomic) IBOutlet UINavigationItem *customerNavigationBarTitle;
+@property (weak, nonatomic) IBOutlet UILabel *gameTimerLabel;
 
-
-@property NSTimer *gameTimer;
 @property NSTimer *titleTimer;
+@property NSTimer *totalTimer;
 @end
 
 
@@ -41,25 +40,29 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    self.title = @"Tic Tac Toe";
     
-    
+    //Create array of squares
     self.myArray = [NSMutableArray arrayWithObjects:self.labelOne, self.labelTwo, self.labelThree, self.labelFour, self.labelFive, self.labelSix, self.labelSeven, self.labelEight, self.labelNine, nil];
+    
+    //Alert Views
     self.alertOne = [[UIAlertView alloc] initWithTitle:@"You Won!!" message:@"X is the Winner!!" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
     [self.alertOne addButtonWithTitle:@"New Game"];
     self.alertTwo = [[UIAlertView alloc] initWithTitle:@"You Won!!" message:@"O is the Winner!!" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
     [self.alertTwo addButtonWithTitle:@"New Game"];
-    self.timerAlertView = [[UIAlertView alloc] initWithTitle:@"You took too long!" message:@"You will lose a turn. :(" delegate:self cancelButtonTitle:@"Okay" otherButtonTitles:nil];
+    
+    //An array of points for all the square labels on the board.
     self.totalPointsArray = [[NSMutableArray alloc] initWithCapacity:9];
     
+    //Clear all label text
     for (int i = 0; i < self.myArray.count; i++) {
         UILabel *labelMark = self.myArray[i];
         labelMark.text = @"";
     }
     
-    self.customerNavigationBarTitle.title = @"10";
+    
+    self.gameTimerLabel.text = @"10";
     self.playerNumber = 1;
-    [self startTimer];
     [self titleTimers];
     
     
@@ -77,6 +80,7 @@
 }
 
 - (IBAction)onLabelTapped:(UITapGestureRecognizer *)tapGesture {
+    
     CGPoint point = [tapGesture locationInView:self.view];
     
     
@@ -92,27 +96,17 @@
                     labelMark.backgroundColor = [UIColor redColor];
                     labelMark.text = @"O";
                     self.playerNumber++;
-                    [self.gameTimer invalidate];
-                    [self startTimer];
-                    [self.titleTimer invalidate];
-                    [self titleTimers];
-                    
+                    self.gameTimerLabel.text = @"10";
                 } else {
                     labelMark.backgroundColor = [UIColor blueColor];
                     labelMark.text = @"X";
                     self.playerNumber++;
-                    [self.gameTimer invalidate];
-                    [self startTimer];
-                    [self.titleTimer invalidate];
-                    [self titleTimers];
-                    
                 }
             }
         }
     }
     
     [self whoWon];
-    [self findWinner];
     [self determineDragableLabelValue];
     
 }
@@ -120,7 +114,6 @@
 
 - (IBAction)newGame:(id)sender {
     self.playerNumber = 0;
-    
     
     //Turns all squares to green colors
     for (int i = 0; i < self.myArray.count; i++) {
@@ -136,13 +129,11 @@
     NSLog(@"New Game Created");
     
     self.playerNumber = 0;
-    [self.gameTimer invalidate];
-    [self startTimer];
+    self.gameTimerLabel.text = @"10";
 
 }
 
 - (void)whoWon{
-    
     NSString *point;
     //for (UILabel *label in self.myArray)
     NSMutableArray *pointsArray = [[NSMutableArray alloc] initWithCapacity:9];
@@ -161,7 +152,15 @@
     }
     self.totalPointsArray = pointsArray;
     NSLog(@"%@\n",self.totalPointsArray);
+    [self findWinner];
 }
+
+-(void)findWinnerTimer{
+    float count_down = 0.1;
+    self.totalTimer = [NSTimer scheduledTimerWithTimeInterval: count_down target: self
+                                                        selector: @selector(findWinner) userInfo: nil repeats: YES];
+}
+
 
 -(void) findWinner {
     NSString *squareOne = self.totalPointsArray[0];
@@ -190,15 +189,13 @@
             self.winner = @"X";
             [self.alertOne show];
     }
-    
     if (rowTwo == -3) {
         self.winner = @"O";
         [self.alertTwo show];
     }else if (rowTwo == 3){
-        self.winner = @"X";
-        [self.alertOne show];
+            self.winner = @"X";
+            [self.alertOne show];
     }
-    
     if (rowThree == -3) {
         self.winner = @"O";
         [self.alertTwo show];
@@ -206,7 +203,6 @@
         self.winner = @"X";
         [self.alertOne show];
     }
-    
     if (columnOne == -3) {
         self.winner = @"O";
         [self.alertTwo show];
@@ -250,11 +246,13 @@
     }
     
     NSLog(@"Row One: %ld", (long)rowOne);
+    [self determineDragableLabelValue];
     
 }
 
 
 - (IBAction)draggableLabel:(UIPanGestureRecognizer *)panGesture {
+    
     CGPoint point = [panGesture locationInView:self.view];
     self.draggableLabel.center = point;
 
@@ -269,18 +267,12 @@
                     labelMarkTwo.backgroundColor = [UIColor redColor];
                     labelMarkTwo.text = @"O";
                     self.playerNumber++;
-                    [self.gameTimer invalidate];
-                    [self startTimer];
-                    [self.titleTimer invalidate];
-                    [self titleTimers];
+                    self.gameTimerLabel.text = @"10";
                 } else {
                     labelMarkTwo.backgroundColor = [UIColor blueColor];
                     labelMarkTwo.text = @"X";
                     self.playerNumber++;
-                    [self.gameTimer invalidate];
-                    [self startTimer];
-                    [self.titleTimer invalidate];
-                    [self titleTimers];
+                    self.gameTimerLabel.text = @"10";
                 }
             }
         }
@@ -288,58 +280,36 @@
 
     [self whoWon];
     [self findWinner];
-    [self determineDragableLabelValue];
     
 }
 
+
+
 -(void) determineDragableLabelValue {
-    NSLog(@"Player Number = %ld",(long)self.playerNumber);
     if (self.playerNumber % 2 == 0) {
         self.draggableLabel.text = @"O";
     } else {
         self.draggableLabel.text = @"X";
     }
-    
 }
 
-- (void)startTimer {
-    
-    float count_down = 10.0;
-    self.gameTimer = [NSTimer scheduledTimerWithTimeInterval: count_down target: self
-                                                    selector: @selector(changePlayerTurn:) userInfo: nil repeats: YES];
-}
-
--(void) changePlayerTurn:(NSTimer*) t {
-    self.playerNumber++;
-    [self whoWon];
-    [self findWinner];
-    [self determineDragableLabelValue];
-    [self.gameTimer invalidate];
-    [self startTimer];
-    NSLog(@"10 Seconds has passed");
-    NSLog(@"The player number value is: %ld", (long)self.playerNumber);
-}
 
 -(void)titleTimers{
     float count_down = 1.0;
     self.titleTimer = [NSTimer scheduledTimerWithTimeInterval: count_down target: self
                                                      selector: @selector(modifyTitle) userInfo: nil repeats: YES];
 }
-
 -(void)modifyTitle{
-    if (self.customerNavigationBarTitle.title.integerValue > 1) {
-        NSInteger time = self.customerNavigationBarTitle.title.integerValue;
+    if (self.gameTimerLabel.text.integerValue > 1) {
+        NSInteger time = self.gameTimerLabel.text.integerValue;
         time--;
-        self.customerNavigationBarTitle.title = [NSString stringWithFormat:@"%ld",(long)time];
+        self.gameTimerLabel.text = [NSString stringWithFormat:@"%ld",(long)time];
     } else {
-        self.customerNavigationBarTitle.title = @"10";
+        self.gameTimerLabel.text = @"10";
+        self.playerNumber++;
+        [self determineDragableLabelValue];
     }
+    NSLog(@"The player number value is: %ld", (long)self.playerNumber);
 }
-
-
-
-
-
-
 
 @end

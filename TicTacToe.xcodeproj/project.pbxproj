@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		661D57BD19E06CFE00FD37CF /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 661D57BC19E06CFE00FD37CF /* WebViewController.m */; };
 		66CB5AA719DE1A6900D520CB /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 66CB5AA619DE1A6900D520CB /* main.m */; };
 		66CB5AAA19DE1A6900D520CB /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 66CB5AA919DE1A6900D520CB /* AppDelegate.m */; };
 		66CB5AAD19DE1A6900D520CB /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66CB5AAC19DE1A6900D520CB /* ViewController.m */; };
@@ -27,6 +28,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		661D57BB19E06CFE00FD37CF /* WebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebViewController.h; sourceTree = "<group>"; };
+		661D57BC19E06CFE00FD37CF /* WebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebViewController.m; sourceTree = "<group>"; };
 		66CB5AA119DE1A6900D520CB /* TicTacToe.temp_caseinsensitive_rename.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TicTacToe.temp_caseinsensitive_rename.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		66CB5AA519DE1A6900D520CB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		66CB5AA619DE1A6900D520CB /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -86,6 +89,8 @@
 				66CB5AAB19DE1A6900D520CB /* ViewController.h */,
 				66CB5AAC19DE1A6900D520CB /* ViewController.m */,
 				66CB5AAE19DE1A6900D520CB /* Main.storyboard */,
+				661D57BB19E06CFE00FD37CF /* WebViewController.h */,
+				661D57BC19E06CFE00FD37CF /* WebViewController.m */,
 				66CB5AB119DE1A6900D520CB /* Images.xcassets */,
 				66CB5AB319DE1A6900D520CB /* LaunchScreen.xib */,
 				66CB5AA419DE1A6900D520CB /* Supporting Files */,
@@ -222,6 +227,7 @@
 				66CB5AAD19DE1A6900D520CB /* ViewController.m in Sources */,
 				66CB5AAA19DE1A6900D520CB /* AppDelegate.m in Sources */,
 				66CB5AA719DE1A6900D520CB /* main.m in Sources */,
+				661D57BD19E06CFE00FD37CF /* WebViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
