@@ -77,9 +77,6 @@
         labelMark.text = @"";
     }
 
-    self.gameTimerLabel.text = @"10";
-    [self titleTimers];
-
 }
 
 -(void)viewDidAppear:(BOOL)animated {
@@ -89,7 +86,7 @@
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     if (buttonIndex == 1) {
-        [self newGame:self];
+        [self setGameDefaults];
     }
 }
 
@@ -145,7 +142,9 @@
     }
     self.gameTimerLabel.text = @"10";
     [self.winner isEqualToString:@""];
-    self.playerNumber = 1;
+    self.gameTimerLabel.text = @"10";
+    [self.titleTimer invalidate];
+    [self titleTimers];
     
 }
 
@@ -201,18 +200,24 @@
 
     if (rowOne == -3 || rowTwo == -3 || rowThree == -3 || columnOne == -3 || columnTwo == -3 || columnThree == -3 || diaganolOne == -3 || diagonalTwo == -3 ) {
         self.winner = @"O";
+        self.playerNumber = 1;
         [self.alertTwo show];
+        [self.titleTimer invalidate];
         NSLog(@"The winner is O");
     }else if (rowOne == 3 || rowTwo == 3 || rowThree == 3 || columnOne == 3 || columnTwo == 3 || columnThree == 3 || diaganolOne == 3 || diagonalTwo == 3 ){
         self.winner = @"X";
+        self.playerNumber = 1;
         [self.alertOne show];
+        [self.titleTimer invalidate];
         NSLog(@"The Winner is X");
     }
     
-    if (self.playerNumber == 10) {
-        if(![self.winner isEqualToString:@"X"] && ![self.winner isEqualToString:@"O"] ){
+    if (![self.totalPointsArray containsObject:@""]) {
+        if (self.playerNumber >= 10) {
+            self.playerNumber = 1;
         NSLog(@" Player Number is : %ld", (long)self.playerNumber);
         [self.alertThree show];
+        [self.titleTimer invalidate];
         }
     }
     
@@ -311,17 +316,6 @@
         NSLog(@"Robot is playing");
     }
 
-    } else if (self.playerNumber == 10){
-        if ([self.winner isEqualToString: @"X"]) {
-            NSLog(@"Why did i do this as well?");
-            [self.alertOne show];
-        } else if ([self.winner isEqualToString:@"O"]){
-            NSLog(@"Why did i do this?");
-            [self whoWon];
-        } else if (![self.winner isEqualToString:@"X"] && ![self.winner isEqualToString:@"O"] ){
-            NSLog(@" Player Number is : %ld", (long)self.playerNumber);
-            [self.alertThree show];
-        }
     }
 }
 
