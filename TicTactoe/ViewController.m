@@ -22,6 +22,8 @@
 
 @property CGPoint originalCenter;
 @property NSInteger playerNumber;
+@property NSInteger robotON;
+@property NSInteger robotBrain;
 
 @property NSMutableArray *myArray;
 @property NSMutableArray *totalPointsArray;
@@ -35,6 +37,9 @@
 
 @property NSTimer *titleTimer;
 @property NSTimer *totalTimer;
+
+
+@property NSInteger randomNumber;
 @end
 
 
@@ -44,6 +49,9 @@
     [super viewDidLoad];
     [self setGameDefaults];
     [self determineDragableLabelValue];
+    
+    self.robotON = 1;
+    [self letsPlayARobot];
     
     self.title = @"Tic Tac Toe";
     
@@ -57,15 +65,15 @@
     [self.alertTwo addButtonWithTitle:@"New Game"];
     
     //An array of points for all the square labels on the board.
-    self.totalPointsArray = [[NSMutableArray alloc] initWithCapacity:9];
+    NSArray *pointsArray = @[@"", @"", @"", @"", @"", @"", @"", @"", @""];
+    self.totalPointsArray = [[NSMutableArray alloc] initWithArray:pointsArray];
     
     //Clear all label text
     for (int i = 0; i < self.myArray.count; i++) {
         UILabel *labelMark = self.myArray[i];
         labelMark.text = @"";
     }
-    
-    
+
     self.gameTimerLabel.text = @"10";
     [self titleTimers];
 
@@ -96,10 +104,16 @@
                     labelMark.text = @"O";
                     self.playerNumber++;
                     self.gameTimerLabel.text = @"10";
+                    if (self.robotON == 1) {
+                        [self letsPlayARobot];
+                    }
                 } else {
                     labelMark.backgroundColor = [UIColor blueColor];
                     labelMark.text = @"X";
                     self.playerNumber++;
+                    if (self.robotON == 1) {
+                        [self letsPlayARobot];
+                    }
                 }
             }
         }
@@ -152,7 +166,7 @@
             }
     }
     self.totalPointsArray = pointsArray;
-    NSLog(@"%@\n",self.totalPointsArray);
+    NSLog(@"Points Array: %@\n",self.totalPointsArray);
     [self findWinner];
 }
 
@@ -183,6 +197,7 @@
     NSInteger diaganolOne = squareOne.integerValue + squareFive.integerValue + squareNine.integerValue;
     NSInteger diagonalTwo = squareThree.integerValue + squareFive.integerValue + squareSeven.integerValue;
     
+
     if (rowOne == -3 || rowTwo == -3 || rowThree == -3 || columnOne == -3 || columnTwo == -3 || columnThree == -3 || diaganolOne == -3 || diagonalTwo == -3 ) {
         self.winner = @"O";
         [self.alertTwo show];
@@ -214,11 +229,17 @@
                     labelMarkTwo.text = @"O";
                     self.playerNumber++;
                     self.gameTimerLabel.text = @"10";
+                    if (self.robotON == 1) {
+                        [self letsPlayARobot];
+                    }
                 } else {
                     labelMarkTwo.backgroundColor = [UIColor blueColor];
                     labelMarkTwo.text = @"X";
                     self.playerNumber++;
                     self.gameTimerLabel.text = @"10";
+                    if (self.robotON == 1) {
+                        [self letsPlayARobot];
+                    }
                 }
             }
         }
@@ -252,6 +273,34 @@
     } else {
         self.gameTimerLabel.text = @"10";
         self.playerNumber++;
+        if (self.robotON == 1) {
+            [self letsPlayARobot];
+        }
+    }
+}
+- (IBAction)robotOnButton:(id)sender {
+    [self letsPlayARobot];
+}
+
+-(void)letsPlayARobot{
+    self.randomNumber = arc4random()%9;
+    UILabel *labelMark = self.myArray[self.randomNumber];
+    NSLog(@"labelMark: %@", labelMark);
+    if (self.robotON == 1 && self.playerNumber % 2 == 0) {
+        int help = 0;
+        while ( help == 0) {
+            if ([labelMark.text isEqualToString: @""]) {
+                labelMark.backgroundColor = [UIColor redColor];
+                labelMark.text = @"O";
+                help = 1;
+                NSLog(@"Done");
+            }
+            self.randomNumber = arc4random()%9;
+            labelMark = self.myArray[self.randomNumber];
+        }
+        self.playerNumber++;
+        self.gameTimerLabel.text = @"10";
+        NSLog(@"Robot is playing");
     }
 }
 

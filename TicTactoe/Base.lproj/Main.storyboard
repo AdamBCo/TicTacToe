@@ -18,15 +18,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Whose Turn" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TeE-1t-iHY">
-                                <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                                <variation key="widthClass=compact" fixedFrame="YES">
-                                    <rect key="frame" x="154" y="542" width="92" height="21"/>
-                                </variation>
-                            </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="URa-K7-rPT">
                                 <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
                                 <color key="backgroundColor" red="0.40232557390000001" green="1" blue="0.141286312" alpha="1" colorSpace="calibratedRGB"/>
@@ -264,6 +255,18 @@
                                     <rect key="frame" x="6" y="504" width="110" height="50"/>
                                 </variation>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dEC-Mj-jww">
+                                <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                                <state key="normal" title="Robot">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <variation key="widthClass=compact" fixedFrame="YES">
+                                    <rect key="frame" x="177" y="545" width="42" height="30"/>
+                                </variation>
+                                <connections>
+                                    <action selector="robotOnButton:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="zcE-0C-AVb"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <gestureRecognizers/>
@@ -295,7 +298,6 @@
                         </constraints>
                         <variation key="default">
                             <mask key="subviews">
-                                <exclude reference="TeE-1t-iHY"/>
                                 <exclude reference="URa-K7-rPT"/>
                                 <exclude reference="xun-kv-cq3"/>
                                 <exclude reference="3EI-we-lv2"/>
@@ -308,6 +310,7 @@
                                 <exclude reference="Aky-X3-Kyl"/>
                                 <exclude reference="d02-Or-umK"/>
                                 <exclude reference="Cvs-gT-xRJ"/>
+                                <exclude reference="dEC-Mj-jww"/>
                             </mask>
                             <mask key="constraints">
                                 <exclude reference="FUl-Yo-VBQ"/>
@@ -332,7 +335,6 @@
                         </variation>
                         <variation key="widthClass=compact">
                             <mask key="subviews">
-                                <include reference="TeE-1t-iHY"/>
                                 <include reference="URa-K7-rPT"/>
                                 <include reference="xun-kv-cq3"/>
                                 <include reference="3EI-we-lv2"/>
@@ -345,6 +347,7 @@
                                 <include reference="Aky-X3-Kyl"/>
                                 <include reference="d02-Or-umK"/>
                                 <include reference="Cvs-gT-xRJ"/>
+                                <include reference="dEC-Mj-jww"/>
                             </mask>
                             <mask key="constraints">
                                 <include reference="FUl-Yo-VBQ"/>
@@ -391,7 +394,6 @@
                         <outlet property="labelSix" destination="3EI-we-lv2" id="3On-AF-Zhj"/>
                         <outlet property="labelThree" destination="orh-5A-Xfy" id="oxZ-Cn-VgB"/>
                         <outlet property="labelTwo" destination="sgz-Ys-OAm" id="gvF-jY-Ekh"/>
-                        <outlet property="whichPlayerLabel" destination="TeE-1t-iHY" id="rSg-4c-yHM"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
