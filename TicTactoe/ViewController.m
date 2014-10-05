@@ -166,7 +166,6 @@
             }
     }
     self.totalPointsArray = pointsArray;
-    NSLog(@"Points Array: %@\n",self.totalPointsArray);
     [self findWinner];
 }
 
@@ -215,13 +214,12 @@
     if (![self.totalPointsArray containsObject:@""]) {
         if (self.playerNumber >= 10) {
             self.playerNumber = 1;
-        NSLog(@" Player Number is : %ld", (long)self.playerNumber);
-        [self.alertThree show];
-        [self.titleTimer invalidate];
+            NSLog(@" Player Number is : %ld", (long)self.playerNumber);
+            [self.titleTimer invalidate];
+            [self.alertThree show];
         }
     }
-    
-    NSLog(@"Row One: %ld", (long)rowOne);
+
     [self determineDragableLabelValue];
     
 }
@@ -297,7 +295,6 @@
     [self findWinner];
     self.randomNumber = arc4random()%9;
     UILabel *labelMark = self.myArray[self.randomNumber];
-    NSLog(@"labelMark: %@", labelMark);
     if (self.playerNumber < 9) {
     if (self.robotON == 1 && self.playerNumber % 2 == 0) {
         int help = 0;
@@ -314,6 +311,8 @@
         self.playerNumber++;
         self.gameTimerLabel.text = @"10";
         NSLog(@"Robot is playing");
+        NSLog(@"PlayerNumber: %ld", (long)self.playerNumber);
+        NSLog(@"RobotBrain: %ld", (long)self.robotBrain);
     }
 
     }
