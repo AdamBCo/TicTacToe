@@ -28,10 +28,6 @@
 @property NSMutableArray *myArray;
 @property NSMutableArray *totalPointsArray;
 @property NSString *winner;
-@property UIAlertView *alertOne;
-@property UIAlertView *alertTwo;
-@property UIAlertView *alertThree;
-@property UIAlertView *timerAlertView;
 @property (strong, nonatomic) IBOutlet UILabel *draggableLabel;
 @property NSInteger *timerValue;
 @property (weak, nonatomic) IBOutlet UILabel *gameTimerLabel;
@@ -48,24 +44,15 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self setGameDefaults];
     [self determineDragableLabelValue];
     
-    self.robotON = 1;
-    [self letsPlayARobot];
+    self.robotON = 0;
     
     self.title = @"Tic Tac Toe";
+    self.gameTimerLabel.text = @"10";
     
     //Create array of squares
     self.myArray = [NSMutableArray arrayWithObjects:self.labelOne, self.labelTwo, self.labelThree, self.labelFour, self.labelFive, self.labelSix, self.labelSeven, self.labelEight, self.labelNine, nil];
-    
-    //Alert Views
-    self.alertOne = [[UIAlertView alloc] initWithTitle:@"You Won!!" message:@"X is the Winner!!" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
-    [self.alertOne addButtonWithTitle:@"New Game"];
-    self.alertTwo = [[UIAlertView alloc] initWithTitle:@"You Won!!" message:@"O is the Winner!!" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
-    [self.alertTwo addButtonWithTitle:@"New Game"];
-    self.alertThree = [[UIAlertView alloc] initWithTitle:@"No Winner" message:@"It looks like no one one this game!" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
-    [self.alertThree addButtonWithTitle:@"New Game"];
     
     //An array of points for all the square labels on the board.
     NSArray *pointsArray = @[@"", @"", @"", @"", @"", @"", @"", @"", @""];
@@ -76,6 +63,8 @@
         UILabel *labelMark = self.myArray[i];
         labelMark.text = @"";
     }
+    
+    [self wouldYouLikeToPlayAlertView];
 
 }
 
@@ -84,11 +73,67 @@
     self.originalCenter = self.draggableLabel.center;
 }
 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (buttonIndex == 1) {
-        [self setGameDefaults];
+-(void)alertViewRobot{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Play the Computer" message:@"Would you like to play the computer?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
+    [alert addButtonWithTitle:@"Yes"];
+    [alert addButtonWithTitle:@"No"];
+    alert.tag = 0;
+    [alert show];
+    
+}
+
+-(void)alertViewNoMoves
+{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"No Winner" message:@"It looks like no one one this game!" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
+    [alert addButtonWithTitle:@"New Game"];
+    alert.tag = 1;
+    [alert show];
+}
+
+
+-(void)alertViewXWinner
+{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"You Won!!" message:@"X is the Winner!!" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
+    [alert addButtonWithTitle:@"New Game"];
+    alert.tag = 1;
+    [alert show];
+}
+
+-(void)alertViewOWinner
+{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"You Won!!" message:@"O is the Winner!!" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
+    [alert addButtonWithTitle:@"New Game"];
+    alert.tag = 1;
+    [alert show];
+}
+
+-(void)wouldYouLikeToPlayAlertView {
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Tic Tac Toe" message:@"Would you like to play Tic Tac Toe?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:nil];
+    [alert addButtonWithTitle:@"Yes"];
+    [alert addButtonWithTitle:@"No"];
+    alert.tag = 1;
+    [alert show];
+    
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if(alertView.tag == 0)
+    {
+        if (buttonIndex == 1) {
+            self.robotON = 1;
+        } else if (buttonIndex == 2)
+            self.robotON = 0;
+    } else if (alertView.tag == 1){
+        if (buttonIndex == 1) {
+            [self setGameDefaults];
+        }
     }
 }
+
+
+
+
 
 - (IBAction)onLabelTapped:(UITapGestureRecognizer *)tapGesture {
     CGPoint point = [tapGesture locationInView:self.view];
@@ -100,12 +145,10 @@
             UILabel *labelMark = self.myArray[i];
             if ([labelMark.text  isEqualToString: @""]) {
                 if (self.playerNumber % 2 == 0) {
-                    labelMark.backgroundColor = [UIColor redColor];
                     labelMark.text = @"O";
                     self.playerNumber++;
                     self.gameTimerLabel.text = @"10";
                 } else {
-                    labelMark.backgroundColor = [UIColor blueColor];
                     labelMark.text = @"X";
                     self.playerNumber++;
                 }
@@ -134,7 +177,6 @@
     //Turns all squares to green colors
     for (int i = 0; i < self.myArray.count; i++) {
         UILabel *labelMark = self.myArray[i];
-        labelMark.backgroundColor = [UIColor greenColor];
         labelMark.text = @"";
     }
     for (int i = 0; i < self.myArray.count; i++){
@@ -200,13 +242,13 @@
     if (rowOne == -3 || rowTwo == -3 || rowThree == -3 || columnOne == -3 || columnTwo == -3 || columnThree == -3 || diaganolOne == -3 || diagonalTwo == -3 ) {
         self.winner = @"O";
         self.playerNumber = 1;
-        [self.alertTwo show];
+        [self alertViewOWinner];
         [self.titleTimer invalidate];
         NSLog(@"The winner is O");
     }else if (rowOne == 3 || rowTwo == 3 || rowThree == 3 || columnOne == 3 || columnTwo == 3 || columnThree == 3 || diaganolOne == 3 || diagonalTwo == 3 ){
         self.winner = @"X";
         self.playerNumber = 1;
-        [self.alertOne show];
+        [self alertViewXWinner];
         [self.titleTimer invalidate];
         NSLog(@"The Winner is X");
     }
@@ -216,7 +258,7 @@
             self.playerNumber = 1;
             NSLog(@" Player Number is : %ld", (long)self.playerNumber);
             [self.titleTimer invalidate];
-            [self.alertThree show];
+            [self alertViewNoMoves];
         }
     }
 
@@ -238,12 +280,10 @@
         if ([labelMarkTwo.text  isEqualToString: @""]) {
             if (CGRectContainsPoint(labelFrameRect, point) && panGesture.state == UIGestureRecognizerStateEnded) {
                 if (self.playerNumber % 2 == 0) {
-                    labelMarkTwo.backgroundColor = [UIColor redColor];
                     labelMarkTwo.text = @"O";
                     self.playerNumber++;
                     self.gameTimerLabel.text = @"10";
                 } else {
-                    labelMarkTwo.backgroundColor = [UIColor blueColor];
                     labelMarkTwo.text = @"X";
                     self.playerNumber++;
                     self.gameTimerLabel.text = @"10";
@@ -288,10 +328,14 @@
     }
 }
 - (IBAction)robotOnButton:(id)sender {
-    [self letsPlayARobot];
+    [self alertViewRobot];
 }
 
 -(void)letsPlayARobot{
+    if (self.playerNumber == 2 || self.playerNumber == 4 || self.playerNumber == 6 || self.playerNumber == 8){
+        [self smarterTry];
+    } else if (self.playerNumber == 10){
+    
     [self findWinner];
     self.randomNumber = arc4random()%9;
     UILabel *labelMark = self.myArray[self.randomNumber];
@@ -300,7 +344,6 @@
         int help = 0;
         while ( help == 0) {
             if ([labelMark.text isEqualToString: @""]) {
-                labelMark.backgroundColor = [UIColor redColor];
                 labelMark.text = @"O";
                 help = 1;
                 NSLog(@"Done");
@@ -314,8 +357,375 @@
         NSLog(@"PlayerNumber: %ld", (long)self.playerNumber);
         NSLog(@"RobotBrain: %ld", (long)self.robotBrain);
     }
+    }
 
     }
 }
 
+
+
+-(void)smarterTry{
+
+            UILabel *labelMarkOne = self.myArray[0];
+            UILabel *labelMarkTwo = self.myArray[1];
+            UILabel *labelMarkThree = self.myArray[2];
+            UILabel *labelMarkFour = self.myArray[3];
+            UILabel *labelMarkFive = self.myArray[4];
+            UILabel *labelMarkSix = self.myArray[5];
+            UILabel *labelMarkSeven = self.myArray[6];
+            UILabel *labelMarkEight = self.myArray[7];
+            UILabel *labelMarkNine = self.myArray[8];
+        if ((self.playerNumber == 2)){
+            if (([labelMarkFive.text isEqualToString:@""])){
+                labelMarkFive.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+            }else if ([labelMarkSeven.text isEqualToString:@""]){
+                labelMarkSeven.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+            }
+        }
+    
+        if ((self.playerNumber == 4 || self.playerNumber == 6 || self.playerNumber == 8)){
+            if (([labelMarkTwo.text isEqualToString: @"O"] && [labelMarkFive.text isEqualToString:@"O"] && [labelMarkEight.text isEqualToString:@""])){
+
+                labelMarkEight.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+            } else if([labelMarkFour.text isEqualToString: @"O"] && [labelMarkFive.text isEqualToString:@"O"] && [labelMarkSix.text isEqualToString:@""]){
+                labelMarkSix.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+                
+            } else if([labelMarkSeven.text isEqualToString: @"X"] && [labelMarkNine.text isEqualToString:@"X"] && [labelMarkEight.text isEqualToString:@""]){
+                labelMarkEight.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+                
+            } else if([labelMarkThree.text isEqualToString: @"O"] && [labelMarkNine.text isEqualToString:@"O"] && [labelMarkSix.text isEqualToString:@""]){
+                labelMarkSix.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+                
+            }else if([labelMarkFour.text isEqualToString: @"X"] && [labelMarkSix.text isEqualToString:@"X"] && [labelMarkFive.text isEqualToString:@""]){
+                labelMarkFive.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+            }else if([labelMarkTwo.text isEqualToString: @"X"] && [labelMarkEight.text isEqualToString:@"X"] && [labelMarkFive.text isEqualToString:@""]){
+                labelMarkFive.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+                
+            }else if([labelMarkNine.text isEqualToString: @"X"] && [labelMarkFour.text isEqualToString:@"X"] && [labelMarkOne.text isEqualToString:@""]){
+                labelMarkOne.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+            }else if([labelMarkNine.text isEqualToString: @"X"] && [labelMarkEight.text isEqualToString:@"X"] && [labelMarkSeven.text isEqualToString:@""]){
+                labelMarkSeven.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+            }else if([labelMarkOne.text isEqualToString: @"X"] && [labelMarkFour.text isEqualToString:@"X"] && [labelMarkSeven.text isEqualToString:@""]){
+                labelMarkSeven.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+            }else if([labelMarkSeven.text isEqualToString: @"X"] && [labelMarkFour.text isEqualToString:@"X"] && [labelMarkOne.text isEqualToString:@""]){
+                labelMarkOne.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+            }else if([labelMarkSeven.text isEqualToString: @"X"] && [labelMarkEight.text isEqualToString:@"X"] && [labelMarkNine.text isEqualToString:@""]){
+                labelMarkNine.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+            }else if([labelMarkThree.text isEqualToString: @"X"] && [labelMarkTwo.text isEqualToString:@"X"] && [labelMarkOne.text isEqualToString:@""]){
+                labelMarkOne.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+            }else if([labelMarkOne.text isEqualToString: @"X"] && [labelMarkTwo.text isEqualToString:@"X"] && [labelMarkThree.text isEqualToString:@""]){
+                labelMarkThree.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+            }else if([labelMarkNine.text isEqualToString: @"X"] && [labelMarkSix.text isEqualToString:@"X"] && [labelMarkThree.text isEqualToString:@""]){
+                labelMarkThree.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+            }else if([labelMarkOne.text isEqualToString: @"X"] && [labelMarkFive.text isEqualToString:@"X"] && [labelMarkNine.text isEqualToString:@""]){
+                labelMarkNine.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+            }else if([labelMarkNine.text isEqualToString: @"X"] && [labelMarkFive.text isEqualToString:@"X"] && [labelMarkOne.text isEqualToString:@""]){
+                labelMarkOne.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+            }else if([labelMarkThree.text isEqualToString: @"X"] && [labelMarkFive.text isEqualToString:@"X"] && [labelMarkSeven.text isEqualToString:@""]){
+                labelMarkSeven.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+            }else if([labelMarkSeven.text isEqualToString: @"X"] && [labelMarkFive.text isEqualToString:@"X"] && [labelMarkThree.text isEqualToString:@""]){
+                labelMarkThree.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+            } else if([labelMarkNine.text isEqualToString: @"X"] && [labelMarkSix.text isEqualToString:@"X"] && [labelMarkThree.text isEqualToString:@""]){
+                labelMarkThree.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+            } else if([labelMarkOne.text isEqualToString: @"X"] && [labelMarkThree.text isEqualToString:@"X"] && [labelMarkTwo.text isEqualToString:@""]){
+                labelMarkTwo.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+            } else if([labelMarkOne.text isEqualToString: @"O"] && [labelMarkTwo.text isEqualToString:@"O"] && [labelMarkThree.text isEqualToString:@""]){
+                labelMarkThree.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+            }else if([labelMarkFive.text isEqualToString: @"X"] && [labelMarkSix.text isEqualToString:@"O"] && [labelMarkFour.text isEqualToString:@""]){
+                labelMarkFour.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+            }else if([labelMarkFive.text isEqualToString: @"O"] && [labelMarkEight.text isEqualToString:@"X"] && [labelMarkTwo.text isEqualToString:@""]){
+                labelMarkTwo.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+            }else if([labelMarkSeven.text isEqualToString: @"O"] && [labelMarkFive.text isEqualToString:@"O"] && [labelMarkThree.text isEqualToString:@""]){
+                labelMarkThree.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+            }else if([labelMarkThree.text isEqualToString: @"O"] && [labelMarkFive.text isEqualToString:@"O"] && [labelMarkSeven.text isEqualToString:@""]){
+                labelMarkSeven.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+            }else if([labelMarkSeven.text isEqualToString: @"O"] && [labelMarkEight.text isEqualToString:@"O"] && [labelMarkNine.text isEqualToString:@""]){
+                labelMarkNine.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+            }else if([labelMarkNine.text isEqualToString: @"O"] && [labelMarkEight.text isEqualToString:@"O"] && [labelMarkSeven.text isEqualToString:@""]){
+                labelMarkSeven.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+            }else if([labelMarkEight.text isEqualToString: @"O"] && [labelMarkTwo.text isEqualToString:@"O"] && [labelMarkFive.text isEqualToString:@""]){
+                labelMarkFive.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+            }else if([labelMarkFour.text isEqualToString: @"O"] && [labelMarkSix.text isEqualToString:@"O"] && [labelMarkFive.text isEqualToString:@""]){
+                labelMarkSeven.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+            }else if([labelMarkTwo.text isEqualToString: @"O"] && [labelMarkFive.text isEqualToString:@"O"] && [labelMarkEight.text isEqualToString:@""]){
+                labelMarkEight.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+            }else if([labelMarkOne.text isEqualToString: @"O"] && [labelMarkFour.text isEqualToString:@"O"] && [labelMarkSeven.text isEqualToString:@""]){
+                labelMarkSeven.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+            }else if([labelMarkOne.text isEqualToString: @"O"] && [labelMarkThree.text isEqualToString:@"O"] && [labelMarkTwo.text isEqualToString:@""]){
+                labelMarkTwo.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+            }else if([labelMarkSeven.text isEqualToString: @"O"] && [labelMarkOne.text isEqualToString:@"O"] && [labelMarkFour.text isEqualToString:@""]){
+                labelMarkFour.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+            }else if([labelMarkThree.text isEqualToString: @"O"] && [labelMarkSix.text isEqualToString:@"O"] && [labelMarkNine.text isEqualToString:@""]){
+                labelMarkNine.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+            }else if([labelMarkThree.text isEqualToString: @"O"] && [labelMarkNine.text isEqualToString:@"O"] && [labelMarkSix.text isEqualToString:@""]){
+                labelMarkSix.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+            }else if([labelMarkSix.text isEqualToString: @"O"] && [labelMarkNine.text isEqualToString:@"O"] && [labelMarkThree.text isEqualToString:@""]){
+                labelMarkThree.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+            } else if (([labelMarkTwo.text isEqualToString: @"X"] && [labelMarkFive.text isEqualToString:@"X"] && [labelMarkEight.text isEqualToString:@""])){
+                labelMarkEight.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+            } else if([labelMarkFour.text isEqualToString: @"X"] && [labelMarkFive.text isEqualToString:@"X"] && [labelMarkSix.text isEqualToString:@""]){
+                labelMarkSix.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+            }else if([labelMarkFive.text isEqualToString: @"X"] && [labelMarkSix.text isEqualToString:@"X"] && [labelMarkFour.text isEqualToString:@""]){
+                labelMarkFour.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+            }else if([labelMarkFive.text isEqualToString: @"X"] && [labelMarkEight.text isEqualToString:@"X"] && [labelMarkTwo.text isEqualToString:@""]){
+                labelMarkTwo.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+            }else if([labelMarkSeven.text isEqualToString: @"X"] && [labelMarkFive.text isEqualToString:@"X"] && [labelMarkThree.text isEqualToString:@""]){
+                labelMarkThree.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+            }else if([labelMarkThree.text isEqualToString: @"X"] && [labelMarkFive.text isEqualToString:@"X"] && [labelMarkSeven.text isEqualToString:@""]){
+                labelMarkSeven.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+            }else if([labelMarkSeven.text isEqualToString: @"X"] && [labelMarkEight.text isEqualToString:@"X"] && [labelMarkNine.text isEqualToString:@""]){
+                labelMarkNine.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+            }else if([labelMarkEight.text isEqualToString: @"X"] && [labelMarkTwo.text isEqualToString:@"X"] && [labelMarkFive.text isEqualToString:@""]){
+                labelMarkFive.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+            }else if([labelMarkFour.text isEqualToString: @"X"] && [labelMarkSix.text isEqualToString:@"X"] && [labelMarkFive.text isEqualToString:@""]){
+                labelMarkFive.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+            }else if([labelMarkTwo.text isEqualToString: @"X"] && [labelMarkFive.text isEqualToString:@"X"] && [labelMarkEight.text isEqualToString:@""]){
+                labelMarkEight.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+            }else if([labelMarkOne.text isEqualToString: @"X"] && [labelMarkFour.text isEqualToString:@"X"] && [labelMarkSeven.text isEqualToString:@""]){
+                labelMarkSeven.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+            }else if([labelMarkSeven.text isEqualToString: @"X"] && [labelMarkOne.text isEqualToString:@"X"] && [labelMarkFour.text isEqualToString:@""]){
+                labelMarkFour.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+            }else if([labelMarkThree.text isEqualToString: @"X"] && [labelMarkSix.text isEqualToString:@"X"] && [labelMarkNine.text isEqualToString:@""]){
+                labelMarkNine.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+            }else if([labelMarkThree.text isEqualToString: @"X"] && [labelMarkNine.text isEqualToString:@"X"] && [labelMarkSix.text isEqualToString:@""]){
+                labelMarkSix.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+            }else if([labelMarkSix.text isEqualToString: @"X"] && [labelMarkNine.text isEqualToString:@"X"] && [labelMarkThree.text isEqualToString:@""]){
+                labelMarkThree.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+            }else if([labelMarkNine.text isEqualToString: @"X"] && [labelMarkOne.text isEqualToString:@"X"] && [labelMarkFive.text isEqualToString:@""]){
+                labelMarkFive.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+            }else if([labelMarkNine.text isEqualToString: @"X"] && [labelMarkFive.text isEqualToString:@"X"] && [labelMarkOne.text isEqualToString:@""]){
+                labelMarkOne.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+            }else if([labelMarkFour.text isEqualToString: @"X"] && [labelMarkSix.text isEqualToString:@"X"] && [labelMarkFive.text isEqualToString:@""]){
+                labelMarkFive.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+            }else if([labelMarkTwo.text isEqualToString: @"X"] && [labelMarkEight.text isEqualToString:@"X"] && [labelMarkFive.text isEqualToString:@""]){
+                labelMarkFive.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+            }else if([labelMarkThree.text isEqualToString: @"X"] && [labelMarkTwo.text isEqualToString:@"X"] && [labelMarkOne.text isEqualToString:@"O"] && [labelMarkFive.text isEqualToString:@""]){
+                labelMarkFive.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+            }else if([labelMarkNine.text isEqualToString: @"X"] && [labelMarkEight.text isEqualToString:@"X"] && [labelMarkSeven.text isEqualToString:@"O"] && [labelMarkFive.text isEqualToString:@""]){
+                labelMarkFive.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+            }else if([labelMarkFour.text isEqualToString: @"X"] && [labelMarkTwo.text isEqualToString:@"X"] && [labelMarkSix.text isEqualToString:@"X"] && [labelMarkFive.text isEqualToString:@""]){
+                labelMarkFive.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+            }else if([labelMarkTwo.text isEqualToString: @"X"] && [labelMarkSix.text isEqualToString:@"X"] && [labelMarkEight.text isEqualToString:@"X"] && [labelMarkFive.text isEqualToString:@""]){
+                labelMarkFive.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+            }else if([labelMarkFour.text isEqualToString: @"X"] && [labelMarkEight.text isEqualToString:@"X"] && [labelMarkSix.text isEqualToString:@"X"] && [labelMarkFive.text isEqualToString:@""]){
+                labelMarkFive.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+            }else if([labelMarkTwo.text isEqualToString: @"X"] && [labelMarkEight.text isEqualToString:@"X"] && [labelMarkFour.text isEqualToString:@"X"] && [labelMarkFive.text isEqualToString:@""]){
+                labelMarkFive.text = @"O";
+                self.gameTimerLabel.text = @"10";
+                self.playerNumber++;
+                NSLog(@"Done");
+            }else{
+                self.randomNumber = arc4random()%9;
+                UILabel *labelMark = self.myArray[self.randomNumber];
+                if (self.playerNumber < 9) {
+                    if (self.robotON == 1 && self.playerNumber % 2 == 0) {
+                        int help = 0;
+                        while ( help == 0) {
+                            if ([labelMark.text isEqualToString: @""]) {
+                                labelMark.text = @"O";
+                                help = 1;
+                                NSLog(@"Done");
+                            }
+                            self.randomNumber = arc4random()%9;
+                            labelMark = self.myArray[self.randomNumber];
+                        }
+                        self.playerNumber++;
+                        self.gameTimerLabel.text = @"10";
+                        NSLog(@"Robot is playing");
+                        NSLog(@"PlayerNumber: %ld", (long)self.playerNumber);
+                        NSLog(@"RobotBrain: %ld", (long)self.robotBrain);
+                    }
+                }
+            }
+        }
+    [self whoWon];
+    [self determineDragableLabelValue];
+    
+}
 @end

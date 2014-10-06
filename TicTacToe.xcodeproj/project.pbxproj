@@ -127,9 +127,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		66CB5AA019DE1A6900D520CB /* TicTacToe.temp_caseinsensitive_rename */ = {
+		66CB5AA019DE1A6900D520CB /* TicTacToe */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 66CB5AC419DE1A6900D520CB /* Build configuration list for PBXNativeTarget "TicTacToe.temp_caseinsensitive_rename" */;
+			buildConfigurationList = 66CB5AC419DE1A6900D520CB /* Build configuration list for PBXNativeTarget "TicTacToe" */;
 			buildPhases = (
 				66CB5A9D19DE1A6900D520CB /* Sources */,
 				66CB5A9E19DE1A6900D520CB /* Frameworks */,
@@ -139,7 +139,7 @@
 			);
 			dependencies = (
 			);
-			name = TicTacToe.temp_caseinsensitive_rename;
+			name = TicTacToe;
 			productName = TicTactoe;
 			productReference = 66CB5AA119DE1A6900D520CB /* TicTacToe.temp_caseinsensitive_rename.app */;
 			productType = "com.apple.product-type.application";
@@ -193,7 +193,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				66CB5AA019DE1A6900D520CB /* TicTacToe.temp_caseinsensitive_rename */,
+				66CB5AA019DE1A6900D520CB /* TicTacToe */,
 				66CB5AB919DE1A6900D520CB /* TicTacToe.temp_caseinsensitive_renameTests */,
 			);
 		};
@@ -244,7 +244,7 @@
 /* Begin PBXTargetDependency section */
 		66CB5ABC19DE1A6900D520CB /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 66CB5AA019DE1A6900D520CB /* TicTacToe.temp_caseinsensitive_rename */;
+			target = 66CB5AA019DE1A6900D520CB /* TicTacToe */;
 			targetProxy = 66CB5ABB19DE1A6900D520CB /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -411,7 +411,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		66CB5AC419DE1A6900D520CB /* Build configuration list for PBXNativeTarget "TicTacToe.temp_caseinsensitive_rename" */ = {
+		66CB5AC419DE1A6900D520CB /* Build configuration list for PBXNativeTarget "TicTacToe" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				66CB5AC519DE1A6900D520CB /* Debug */,

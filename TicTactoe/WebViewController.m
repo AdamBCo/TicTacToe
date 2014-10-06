@@ -17,10 +17,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    NSString *urlString = @"http://en.wikipedia.org/wiki/Tic-tac-toe";
-    NSURL *url = [NSURL URLWithString:urlString];
-    NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
-    [self.webView loadRequest:urlRequest];
+    [self loadPage:@"https://en.wikipedia.org/wiki/Tic-tac-toe"];
     
 }
 
@@ -28,6 +25,7 @@
     NSURL *url = [NSURL URLWithString:urlString];
     NSURLRequest *urlRequest = [NSURLRequest requestWithURL:url];
     [self.webView loadRequest:urlRequest];
+    NSLog(@"Website Loaded");
     
 }
 
